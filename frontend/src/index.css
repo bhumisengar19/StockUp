@@ -1,0 +1,381 @@
+/* ═══════════════════════════════════════════════════════════════
+   StockUp  ·  Global Theme System
+   Comic Neue font + Day/Night environmental theme
+═══════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Custom Properties ─────────────────────────────────── */
+:root {
+  --bg:          #eff6ff;
+  --bg-2:        rgba(255,255,255,0.7);
+  --text:        #1e293b;
+  --text-muted:  #64748b;
+  --card:        rgba(255,255,255,0.75);
+  --card-border: rgba(147,197,253,0.5);
+  --button:      #3b82f6;
+  --border:      rgba(147,197,253,0.4);
+  --shadow:      rgba(30,80,160,0.15);
+  --sidebar:     rgba(255,255,255,0.85);
+  --header:      rgba(255,255,255,0.8);
+  --input-bg:    rgba(255,255,255,0.9);
+  --transition:  400ms cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ─── Dark Theme Variables ──────────────────────────────────── */
+.dark-theme, html.dark-theme, html.dark {
+  --bg:          #020817;
+  --bg-2:        rgba(10,22,40,0.8);
+  --text:        #e2e8f0;
+  --text-muted:  #94a3b8;
+  --card:        rgba(10,25,50,0.75);
+  --card-border: rgba(30,60,120,0.5);
+  --button:      #1d4ed8;
+  --border:      rgba(30,60,120,0.4);
+  --shadow:      rgba(0,0,0,0.4);
+  --sidebar:     rgba(5,15,35,0.9);
+  --header:      rgba(5,15,35,0.85);
+  --input-bg:    rgba(10,25,50,0.8);
+}
+
+/* ─── Base ──────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    transition:
+      background-color var(--transition),
+      border-color var(--transition),
+      color var(--transition),
+      box-shadow var(--transition);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Comic Neue', cursive, sans-serif;
+    color: var(--text);
+    background: transparent;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: rgba(59,130,246,0.3);
+    color: var(--text);
+  }
+}
+
+/* ─── Cloud Shapes (CSS only) ───────────────────────────────── */
+.cloud-back,
+.cloud-front {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+  transition: opacity var(--transition), background var(--transition);
+}
+
+.cloud-back {
+  width: 280px;
+  height: 80px;
+  filter: blur(18px);
+  animation: cloudDrift linear infinite;
+}
+
+.cloud-front {
+  width: 360px;
+  height: 100px;
+  filter: blur(10px);
+  animation: cloudDrift linear infinite;
+}
+
+/* ─── Keyframes ─────────────────────────────────────────────── */
+@keyframes cloudDrift {
+  from { transform: translateX(0px); }
+  to   { transform: translateX(calc(100vw + 400px)); }
+}
+
+@keyframes sunPulse {
+  0%, 100% { box-shadow: 0 0 60px 30px rgba(253,224,71,0.45), 0 0 120px 60px rgba(253,224,71,0.2); transform: scale(1); }
+  50%       { box-shadow: 0 0 80px 40px rgba(253,224,71,0.6),  0 0 160px 80px rgba(253,224,71,0.25); transform: scale(1.04); }
+}
+
+@keyframes moonPulse {
+  0%, 100% { box-shadow: 0 0 40px 20px rgba(148,163,184,0.3), 0 0 80px 40px rgba(148,163,184,0.1); transform: scale(1); }
+  50%       { box-shadow: 0 0 55px 28px rgba(148,163,184,0.45), 0 0 110px 55px rgba(148,163,184,0.15); transform: scale(1.03); }
+}
+
+@keyframes toggleGlow {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(1.15); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(0deg); }
+  25%       { transform: rotate(1deg) scale(1.02); }
+  75%       { transform: rotate(-1deg) scale(1.02); }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ─── Components ────────────────────────────────────────────── */
+@layer components {
+
+  /* Glassmorphism Card */
+  .card {
+    background: var(--card);
+    border: 1.5px solid var(--card-border);
+    border-radius: 18px;
+    padding: 1.5rem;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow:
+      0 4px 24px var(--shadow),
+      inset 0 1px 0 rgba(255,255,255,0.15);
+    transition:
+      transform 300ms ease,
+      box-shadow 300ms ease,
+      background var(--transition),
+      border-color var(--transition);
+  }
+
+  .card-hover:hover {
+    transform: translateY(-3px) rotate(0.4deg);
+    box-shadow:
+      0 12px 40px var(--shadow),
+      inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+
+  /* Doodle border (sketch style) */
+  .doodle-border {
+    border: 2px solid currentColor;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  }
+
+  .doodle-shadow {
+    box-shadow: 4px 4px 0px var(--text);
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-bold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-primary {
+    background: var(--button);
+    color: #fff;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 12px rgba(59,130,246,0.4);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(59,130,246,0.5);
+  }
+
+  .btn-secondary {
+    background: var(--card);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+  }
+
+  .btn-danger {
+    background: rgba(239,68,68,0.15);
+    color: #ef4444;
+    border: 1.5px solid rgba(239,68,68,0.3);
+  }
+
+  /* Inputs */
+  .input-field {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    background: var(--input-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    backdrop-filter: blur(8px);
+    outline: none;
+    transition: border-color 200ms, box-shadow 200ms, background var(--transition);
+  }
+
+  .input-field::placeholder {
+    color: var(--text-muted);
+  }
+
+  .input-field:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+  }
+
+  .input-label {
+    @apply block text-sm font-bold mb-1.5;
+    color: var(--text);
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider;
+    border-radius: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    backdrop-filter: blur(6px);
+  }
+
+  /* Table */
+  .table-container {
+    background: var(--card);
+    border: 1.5px solid var(--card-border);
+    border-radius: 18px;
+    overflow: hidden;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .table-header {
+    background: var(--bg-2);
+    border-bottom: 1.5px solid var(--border);
+  }
+
+  .table-row {
+    border-bottom: 1px solid var(--border);
+    transition: background 200ms;
+  }
+
+  .table-row:last-child {
+    border-bottom: none;
+  }
+
+  .table-row:hover {
+    background: var(--bg-2);
+  }
+
+  /* Sidebar */
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 font-bold transition-all duration-200 relative;
+    color: var(--text-muted);
+    border-radius: 12px;
+  }
+
+  .sidebar-link:hover {
+    color: var(--text);
+    background: var(--bg-2);
+    transform: translateX(2px);
+  }
+
+  .sidebar-link:hover::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background: currentColor;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  }
+
+  .sidebar-link-active {
+    color: #3b82f6 !important;
+    background: rgba(59,130,246,0.12) !important;
+    border: 1px solid rgba(59,130,246,0.25);
+    box-shadow: 0 2px 12px rgba(59,130,246,0.15);
+    transform: translateX(3px);
+  }
+
+  .sidebar-link-active::after {
+    display: none;
+  }
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+.custom-scrollbar::-webkit-scrollbar       { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 99px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ─── Utility animations ────────────────────────────────────── */
+.animate-fade-in  { animation: fadeIn  0.35s ease-out both; }
+.animate-slide-in { animation: slideIn 0.4s  ease-out both; }
+.animate-wobble   { animation: wobble  0.6s  ease-in-out both; }
+.animate-spin-slow { animation: spinSlow 1.2s linear infinite; }
+
+/* ─── Premium Interaction Animations ──────────────────────────── */
+
+/* 5. Cursor Glow Layer */
+.cursor-glow {
+  position: fixed;
+  top: -75px; left: -75px;
+  width: 150px; height: 150px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.4);
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: soft-light;
+  will-change: transform;
+}
+.dark-theme .cursor-glow, html.dark .cursor-glow {
+  background: rgba(148, 163, 184, 0.3);
+}
+
+/* 6. Inputs (already handled partly, adding focus shadow explicitly) */
+.input-field {
+  transition: box-shadow 200ms ease, border-color 200ms ease, background var(--transition);
+}
+.input-field:hover {
+  box-shadow: 0 0 12px var(--shadow);
+}
+.input-field:focus {
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.25), 0 0 16px rgba(59,130,246,0.15) !important;
+}
+
+/* 7. Sidebar Items sliding & shadow */
+.sidebar-link {
+  transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease;
+  will-change: transform;
+}
+.sidebar-link:hover {
+  transform: translateX(4px) scale(1.01);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+/* 8. Icons inside interactive elements */
+.btn svg, .sidebar-link svg {
+  transition: transform 150ms ease;
+}
+.btn:hover svg, .sidebar-link:hover svg {
+  transform: scale(1.1) rotate(-3deg);
+}
